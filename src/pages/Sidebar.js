@@ -2,7 +2,22 @@ import { useState, useEffect } from 'react'
 import { Avatar } from '@material-ui/core'
 import { ExpandMore, Add, Mic, Settings, Headset } from '@material-ui/icons'
 
+import firebaseApp from '../firebase/credentials'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+const firestore = getFirestore(firebaseApp)
+
 function Sidebar({ user }) {
+    function addChannel() {
+        const channelName = prompt("Choose a channel name!")
+        if (channelName) {
+            const docRef = doc(firestore, `channels/${channelName}`)
+            setDoc(docRef, {
+                id: new Date().getTime(),
+                name: channelName,
+            })
+        }
+    }
+
     return (
         <div className="sidebar">
 
@@ -20,7 +35,7 @@ function Sidebar({ user }) {
                         <h4>Text Channels</h4>
                     </div>
                     <div>
-                        <Add className="sidebar__addChannel" onClick={console.log('channel added')} />
+                        <Add className="sidebar__addChannel" onClick={addChannel} />
                     </div>
                 </div>
 
