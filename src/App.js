@@ -24,7 +24,7 @@ function App() {
       {user ? (
         <>
           {" "}
-          <Sidebar /> <ChatScreen />{" "}
+          <Sidebar user={user} /> <ChatScreen />{" "}
         </>
       ) : (
         <Login />
