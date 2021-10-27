@@ -3,10 +3,13 @@ import { Avatar } from '@material-ui/core'
 import { ExpandMore, Add, Mic, Settings, Headset } from '@material-ui/icons'
 
 import firebaseApp from '../firebase/credentials'
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, collection, getDocs } from 'firebase/firestore'
+import ChannelInSidebar from '../components/ChannelInSidebar'
 const firestore = getFirestore(firebaseApp)
 
 function Sidebar({ user }) {
+    const [channelList, setChannelList] = useState([])
+
     function addChannel() {
         const channelName = prompt("Choose a channel name!")
         if (channelName) {
@@ -15,8 +18,25 @@ function Sidebar({ user }) {
                 id: new Date().getTime(),
                 name: channelName,
             })
+
+            getChannels()
         }
     }
+
+    async function getChannels() {
+        const channelArr = []
+        const collectionRef = collection(firestore, "channels")
+        const channelsSecret = await getDocs(collectionRef)
+        channelsSecret.forEach(channelSecret => {
+            channelArr.push(channelSecret.data())
+        })
+
+        setChannelList(channelArr)
+    }
+
+    useEffect(() => {
+        getChannels()
+    }, [])
 
     return (
         <div className="sidebar">
@@ -41,7 +61,16 @@ function Sidebar({ user }) {
 
                 {/*  Channels List */}
                 <div className="sidebar__channelsList">
-                    {/* {Map channels in the future} */}
+                    {/* {Map channels */}
+                    {channelList ? channelList.map((channel) => {
+                        return (
+                            <ChannelInSidebar name={channel.name} id={channel.id} />
+                        )
+                    })
+                        :
+                        null
+                    }
+
                 </div>
             </div>
 
