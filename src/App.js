@@ -9,6 +9,7 @@ const auth = getAuth(firebaseApp)
 
 function App() {
   const [user, setUser] = useState(null)
+  const [currentChannel, setCurrentChannel] = useState(null)
 
   onAuthStateChanged(auth, (userFirebase) => {
     // check if we start or finish the session
@@ -20,11 +21,17 @@ function App() {
   })
 
   return (
-    <div>
+    <div className="app">
       {user ? (
         <>
           {" "}
-          <Sidebar user={user} /> <ChatScreen />{" "}
+          <Sidebar
+            user={user}
+            setCurrentChannel={setCurrentChannel}
+          />
+          <ChatScreen
+            currentChannel={currentChannel}
+          />{" "}
         </>
       ) : (
         <Login />

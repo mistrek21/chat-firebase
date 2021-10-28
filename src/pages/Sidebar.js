@@ -7,7 +7,7 @@ import { getFirestore, doc, setDoc, collection, getDocs } from 'firebase/firesto
 import ChannelInSidebar from '../components/ChannelInSidebar'
 const firestore = getFirestore(firebaseApp)
 
-function Sidebar({ user }) {
+function Sidebar({ user, setCurrentChannel }) {
     const [channelList, setChannelList] = useState([])
 
     function addChannel() {
@@ -64,7 +64,12 @@ function Sidebar({ user }) {
                     {/* {Map channels */}
                     {channelList ? channelList.map((channel) => {
                         return (
-                            <ChannelInSidebar name={channel.name} id={channel.id} />
+                            <div onClick={() => setCurrentChannel(channel.name)}>
+                                <ChannelInSidebar
+                                    name={channel.name}
+                                    id={channel.id}
+                                />
+                            </div>
                         )
                     })
                         :
