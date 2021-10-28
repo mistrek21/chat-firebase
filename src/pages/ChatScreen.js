@@ -2,8 +2,27 @@ import { useState, useEffect, useRef } from 'react'
 import { AddCircle, CreditCard, Gif, EmojiEmotions } from '@material-ui/icons'
 import ChatHeader from '../components/ChatHeader'
 
-function ChatScreen({ currentChannel }) {
+import firebaseApp from '../firebase/credentials'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+const firestore = getFirestore(firebaseApp)
+
+function ChatScreen({ currentChannel, user }) {
     const [inputMessage, setInputMessage] = useState('')
+
+    function sendMessage(e) {
+        e.preventDefault()
+
+        const docRef = doc(firestore, `channels/${currentChannel}/messages/${new Date().getTime()}`)
+
+        setDoc(docRef, {
+            photo: user.photoURL,
+            user: user.displayName,
+            message: inputMessage,
+            id: new Date().getTime()
+        })
+
+        setInputMessage("")
+    }
 
     return (
         <div className="chat">
@@ -14,14 +33,18 @@ function ChatScreen({ currentChannel }) {
             </div>
             <div className="chat__input">
                 <AddCircle fontSize="large" />
-                <form>
+                <form onSubmit={sendMessage}>
                     <input type="text"
-                        disabled
+                        disabled={currentChannel ? false : true}
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
                         placeholder={`Send messages # ${currentChannel || ""}`}
                     />
-                    <button disabled className="chat__inputButton" type="submit">
+                    <button
+                        disabled={currentChannel ? false : true}
+                        className="chat__inputButton"
+                        type="submit"
+                    >
                         Send Message
                     </button>
                 </form>

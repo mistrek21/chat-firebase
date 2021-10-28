@@ -31,6 +31,7 @@ function App() {
           />
           <ChatScreen
             currentChannel={currentChannel}
+            user={user}
           />{" "}
         </>
       ) : (
