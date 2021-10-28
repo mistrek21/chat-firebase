@@ -11,6 +11,8 @@ function ChatScreen({ currentChannel, user }) {
     const [inputMessage, setInputMessage] = useState('')
     const [messageList, setMessageList] = useState([])
 
+    const anchor = useRef()
+
     function sendMessage(e) {
         e.preventDefault()
 
@@ -25,6 +27,7 @@ function ChatScreen({ currentChannel, user }) {
 
         setInputMessage("")
         getMessageList()
+        anchor.current.scrollIntoView({behavior: "smooth"})
     }
 
     async function getMessageList() {
@@ -50,11 +53,11 @@ function ChatScreen({ currentChannel, user }) {
 
             <div className="chat__messages">
                 {/* MAP messages from firestore */}
-                {   messageList ? messageList.map(message => {
-                    return <Message firebaseMessage={message}/>
+                {messageList ? messageList.map(message => {
+                    return <Message firebaseMessage={message} />
                 }) : null
-
                 }
+                <div ref={anchor} style={{ marginBottom: "55px" }}></div>
             </div>
             <div className="chat__input">
                 <AddCircle fontSize="large" />
