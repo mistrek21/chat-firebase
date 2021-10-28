@@ -5,6 +5,8 @@ import { ExpandMore, Add, Mic, Settings, Headset } from '@material-ui/icons'
 import firebaseApp from '../firebase/credentials'
 import { getFirestore, doc, setDoc, collection, getDocs } from 'firebase/firestore'
 import ChannelInSidebar from '../components/ChannelInSidebar'
+import { signOut, getAuth } from 'firebase/auth'
+const auth = getAuth(firebaseApp)
 const firestore = getFirestore(firebaseApp)
 
 function Sidebar({ user, setCurrentChannel }) {
@@ -86,7 +88,13 @@ function Sidebar({ user, setCurrentChannel }) {
                     <h3>{user.displayName}</h3>
                     <p>{user.uid.substring(0, 4)}</p>
                 </div>
+                <div className="sidebar__profileIcons">
+                    <Mic />
+                    <Headset />
+                    <Settings onClick={() => signOut(auth)} />
+                </div>
             </div>
+
         </div>
     )
 }
