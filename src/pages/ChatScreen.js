@@ -18,16 +18,31 @@ function ChatScreen({ currentChannel, user }) {
 
         const docRef = doc(firestore, `channels/${currentChannel}/messages/${new Date().getTime()}`)
 
+        const messageFamilyFriendly = filterMessage(inputMessage)
+
         setDoc(docRef, {
             photo: user.photoURL,
             user: user.displayName,
-            message: inputMessage,
+            message: messageFamilyFriendly,
             id: new Date().getTime()
         })
 
         setInputMessage("")
         getMessageList()
-        anchor.current.scrollIntoView({behavior: "smooth"})
+        anchor.current.scrollIntoView({ behavior: "smooth" })
+    }
+
+    function filterMessage(originalText) {
+        const badboy = ["stupid", "nigga", "motherfucker", "bitch"]
+
+        const array = originalText.split("")
+        array.forEach((word, index) => {
+            if (badboy.includes(word)) {
+                array[index] = "**** i am gonna tell to your mum ****"
+            }
+        })
+
+        return array
     }
 
     async function getMessageList() {
@@ -57,7 +72,7 @@ function ChatScreen({ currentChannel, user }) {
                     return <Message firebaseMessage={message} />
                 }) : null
                 }
-                <div ref={anchor} style={{ marginBottom: "55px" }}></div>
+                <div ref={anchor} style={{ marginBottom: "75px" }}></div>
             </div>
             <div className="chat__input">
                 <AddCircle fontSize="large" />
