@@ -35,14 +35,14 @@ function ChatScreen({ currentChannel, user }) {
     function filterMessage(originalText) {
         const badboy = ["stupid", "nigga", "motherfucker", "bitch"]
 
-        const array = originalText.split("")
+        const array = originalText.split(" ")
         array.forEach((word, index) => {
             if (badboy.includes(word)) {
                 array[index] = "**** i am gonna tell to your mum ****"
             }
         })
 
-        return array
+        return array.join(" ")
     }
 
     async function getMessageList() {
